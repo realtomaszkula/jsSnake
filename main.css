@@ -1,0 +1,19 @@
+#container {
+  margin: 50px auto;
+  width: 440px;
+  height: 440px;
+  border-left: 1px solid #b2b2ff;
+  border-top: 1px solid #b2b2ff;
+}
+
+.grid {
+  float: left;
+  width: 10px;
+  height: 10px;
+  border-right: 1px solid #b2b2ff;
+  border-bottom: 1px solid #b2b2ff;
+}
+
+.snake {
+  background-color: red;
+}
