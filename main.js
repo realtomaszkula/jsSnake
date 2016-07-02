@@ -80,14 +80,21 @@ function changeDirection(event){
 
 $(document).ready(function(){
   renderBoard();
+  renderSnake();
 
-
+  var interval;
+  var gameLoop = function() {
+    interval =  window.setInterval(function(){
+      gamePlay();
+    },
+      250
+    );
+  };
 
   document.onkeypress = function (event) {
-    console.log(event.which);
-
+    clearInterval(interval);
+    gameLoop();
     changeDirection(event);
-    window.setInterval(function(){ gamePlay(); }, 250);
   };
 
 
