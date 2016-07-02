@@ -63,11 +63,6 @@ function gameOver(){
             body[1] > 40  ||  body[1] < 0;
 }
 
-function gamePlay(){
-  move();
-  renderSnake();
-  if (gameOver()) return;
-}
 
 function changeDirection(event){
   switch(event.which) {
@@ -78,23 +73,21 @@ function changeDirection(event){
   }
 }
 
+function gamePlay(){
+  move();
+  renderSnake();
+}
+
+
 $(document).ready(function(){
   renderBoard();
   renderSnake();
 
-  var interval;
-  var gameLoop = function() {
-    interval =  window.setInterval(function(){
-      gamePlay();
-    },
-      250
-    );
-  };
 
   document.onkeypress = function (event) {
-    clearInterval(interval);
-    gameLoop();
     changeDirection(event);
+    if (gameOver()) return;
+    setTimeout(gamePlay, 250);
   };
 
 
