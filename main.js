@@ -72,13 +72,16 @@ function gameOver(snake){
   //remove head to compare if head bitten any parts of the body (same position)
   var removedHead = snakeBody.shift();
 
-  // comparing arrays stringified b/c [1,2] == [1,2] returns false if they are not the same obj
-  var occupiedBySnake = snakeBody.some((bodyPart) => {
-    return JSON.stringify(bodyPart) == JSON.stringify(removedHead);
+  return  outsideOfTheBoard || occupiedBySnake(snakeBody, removedHead);
+}
+
+// comparing arrays stringified b/c [1,2] == [1,2] returns false if they are not the same obj
+function occupiedBySnake(snakeBody, target) {
+  var result = snakeBody.some((bodyPart) => {
+    return JSON.stringify(bodyPart) == JSON.stringify(target);
   });
 
-  console.log(occupiedBySnake);
-  return  outsideOfTheBoard || occupiedBySnake ;
+  return result;
 }
 
 function correctInput(event) {
@@ -133,6 +136,10 @@ function moveLoop(){
     }, 250);
 }
 
+function renderFood() {
+  emptyFields = snake.body;
+}
+
 $(document).ready(function() {
   renderBoard();
   renderSnake();
@@ -140,6 +147,7 @@ $(document).ready(function() {
 
 
 });
+
 
 
 
