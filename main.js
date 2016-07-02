@@ -1,5 +1,5 @@
 var snake = {
-  direction : 'r',
+  direction : 119,
   body : [[20,20],[20,19],[20,18]],
 };
 
@@ -39,17 +39,21 @@ function move(){
   var newPosition;
 
   switch (snake.direction) {
-    case 'r' :
-      newPosition = [body[0][0], body[0][1] + 1];
-      break;
-    case 'l' :
-      newPosition = [body[0][0], body[0][1] - 1];
-      break;
-    case 'u' :
+    //up
+    case 119 :
       newPosition = [body[0][0] - 1, body[0][1]];
       break;
-    case 'd' :
+    //right
+    case 100 :
+      newPosition = [body[0][0], body[0][1] + 1];
+      break;
+    //down
+    case 115 :
       newPosition = [body[0][0] + 1, body[0][1]];
+      break;
+    //left
+    case 97 :
+      newPosition = [body[0][0], body[0][1] - 1];
       break;
   }
 
@@ -57,20 +61,23 @@ function move(){
   snake.body.pop();
 }
 
-function gameOver(){
+function gameOver(key){
   var body = snake.body[0];
   return body[0] > 40  ||  body[0] < 0 ||
             body[1] > 40  ||  body[1] < 0;
 }
 
 
-function changeDirection(event){
-  switch(event.which) {
-    case 119 : snake.direction = 'u'; break;
-    case 100 : snake.direction = 'r'; break;
-    case 115 : snake.direction = 'd'; break;
-    case  97 : snake.direction = 'l'; break;
-  }
+function correctInput(event) {
+  return [119, 100, 115, 97].includes(event.which);
+}
+
+function changeDirection(event) {
+  return snake.direction = event.which;
+}
+
+function sameDirection(event) {
+  return snake.direction == event.which;
 }
 
 function moveSnake(){
@@ -83,6 +90,10 @@ function moveLoop(){
   var moveInterval = setInterval(function(){
 
       document.onkeypress = function() {
+        console.log(sameDirection(event));
+        if (sameDirection(event) || !correctInput(event)) {
+          return;
+        }
         changeDirection(event);
         clearInterval(moveInterval);
         moveSnake();
