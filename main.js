@@ -1,23 +1,10 @@
-  var snake = {
-    direction : 'r',
-    body : [[20,20],[20,19]],
-  };
+var snake = {
+  direction : 'r',
+  body : [[20,20],[20,19]],
+};
 
 
 function changeDirection(){
-}
-
-function getInput(){
-  var key = '';
-  $('body').keydown(function(event) {
-    switch(event.which) {
-        case 38 : key = 'u'; break;
-        case 39 : key = 'r'; break;
-        case 40 : key = 'd'; break;
-        case 41 : key = 'l'; break;
-    }
-  });
-  return key;
 }
 
 function renderBoard() {
@@ -53,16 +40,16 @@ function move(){
 
   switch (snake.direction) {
     case 'r' :
-      newPosition = [body[0][0] + 1, body[0][1]];
-      break;
-    case 'l' :
-      newPosition = [body[0][0] - 1, body[0][1]];
-      break;
-    case 'u' :
       newPosition = [body[0][0], body[0][1] + 1];
       break;
-    case 'd' :
+    case 'l' :
       newPosition = [body[0][0], body[0][1] - 1];
+      break;
+    case 'u' :
+      newPosition = [body[0][0] - 1, body[0][1]];
+      break;
+    case 'd' :
+      newPosition = [body[0][0] + 1, body[0][1]];
       break;
   }
 
@@ -76,15 +63,34 @@ function gameOver(){
             body[1] > 40  ||  body[1] < 0;
 }
 
+function gamePlay(){
+  move();
+  renderSnake();
+  if (gameOver()) return;
+}
+
+function changeDirection(event){
+  switch(event.which) {
+    case 119 : snake.direction = 'u'; break;
+    case 100 : snake.direction = 'r'; break;
+    case 115 : snake.direction = 'd'; break;
+    case  97 : snake.direction = 'l'; break;
+  }
+}
+
 $(document).ready(function(){
-    renderBoard();
-    setInterval(function() {
-        renderSnake();
-        move();
-        if (gameOver()) return;
-      },
-        250
-    );
+  renderBoard();
+
+
+
+  document.onkeypress = function (event) {
+    console.log(event.which);
+
+    changeDirection(event);
+    window.setInterval(function(){ gamePlay(); }, 250);
+  };
+
+
 
 });
 
