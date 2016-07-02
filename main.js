@@ -1,6 +1,6 @@
 var snake = {
   direction : 'r',
-  body : [[20,20],[20,19]],
+  body : [[20,20],[20,19],[20,18]],
 };
 
 
@@ -73,23 +73,33 @@ function changeDirection(event){
   }
 }
 
-function gamePlay(){
+function moveSnake(){
   move();
   renderSnake();
 }
 
 
-$(document).ready(function(){
+function moveLoop(){
+  var moveInterval = setInterval(function(){
+
+      document.onkeypress = function() {
+        changeDirection(event);
+        clearInterval(moveInterval);
+        moveSnake();
+        moveLoop();
+      };
+
+      moveSnake();
+
+    }, 250);
+}
+
+
+
+$(document).ready(function() {
   renderBoard();
   renderSnake();
-
-
-  document.onkeypress = function (event) {
-    changeDirection(event);
-    if (gameOver()) return;
-    setTimeout(gamePlay, 250);
-  };
-
+  moveLoop();
 
 
 });
