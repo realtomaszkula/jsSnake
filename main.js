@@ -1,6 +1,6 @@
 var snake = {
   direction : 119,
-  body : [[20,20],[20,19],[20,18]],
+  body : [[20,20],[20,19],[20,18],[20,17],[20,16],[20,15],[20,14],[20,13],[20,12],[20,11]],
 };
 
 
@@ -61,10 +61,24 @@ function move(){
   snake.body.pop();
 }
 
-function gameOver(key){
-  var body = snake.body[0];
-  return body[0] > 40  ||  body[0] < 0 ||
-            body[1] > 40  ||  body[1] < 0;
+function gameOver(snake){
+  //shallow copy
+  var snakeBody = snake.body.slice(0);
+  var snakeHead = snakeBody[0];
+
+  var outsideOfTheBoard =  snakeHead[0] > 40  ||  snakeHead[0] < 1 ||
+            snakeHead[1] > 40  ||  snakeHead[1] < 1;
+
+  //remove head to compare if head bitten any parts of the body (same position)
+  var removedHead = snakeBody.shift();
+
+  // comparing arrays stringified b/c [1,2] == [1,2] returns false if they are not the same obj
+  var occupiedBySnake = snakeBody.some((bodyPart) => {
+    return JSON.stringify(bodyPart) == JSON.stringify(removedHead);
+  });
+
+  console.log(occupiedBySnake);
+  return  outsideOfTheBoard || occupiedBySnake ;
 }
 
 function correctInput(event) {
@@ -99,7 +113,6 @@ function moveLoop(){
   var moveInterval = setInterval(function(){
 
       document.onkeypress = function() {
-        console.log(sameDirection(event));
         if (!correctInput(event) || sameDirection(event) || oppositeDirection(event)) {
           return;
         }
@@ -109,12 +122,16 @@ function moveLoop(){
         moveLoop();
       };
 
+      if (gameOver(snake)) {
+        clearInterval(moveInterval);
+        return;
+      }
+
       moveSnake();
+
 
     }, 250);
 }
-
-
 
 $(document).ready(function() {
   renderBoard();
