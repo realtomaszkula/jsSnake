@@ -67,17 +67,26 @@ function gameOver(key){
             body[1] > 40  ||  body[1] < 0;
 }
 
-
 function correctInput(event) {
   return [119, 100, 115, 97].includes(event.which);
 }
 
 function changeDirection(event) {
-  return snake.direction = event.which;
+  snake.direction = event.which;
 }
 
 function sameDirection(event) {
   return snake.direction == event.which;
+}
+
+function oppositeDirection(event) {
+  key = event.which;
+  switch (key) {
+    case 119 : return snake.direction == 115;
+    case 115 : return snake.direction == 119;
+    case 97  : return snake.direction == 100;
+    case 100 : return snake.direction == 97;
+   }
 }
 
 function moveSnake(){
@@ -91,7 +100,7 @@ function moveLoop(){
 
       document.onkeypress = function() {
         console.log(sameDirection(event));
-        if (sameDirection(event) || !correctInput(event)) {
+        if (!correctInput(event) || sameDirection(event) || oppositeDirection(event)) {
           return;
         }
         changeDirection(event);
