@@ -1,6 +1,7 @@
 var snake = {
   direction : 119,
-  body : [[20,20],[20,19],[20,18],[20,17],[20,16],[20,15],[20,14],[20,13],[20,12],[20,11]],
+  body : [[20,20],[20,19],[20,18]],
+  food : [],
 };
 
 
@@ -56,9 +57,14 @@ function move(){
       newPosition = [body[0][0], body[0][1] - 1];
       break;
   }
-
   snake.body = [newPosition, ...body];
-  snake.body.pop();
+
+  if (!snake.ateFood) {
+    snake.body.pop();
+  } else {
+    snake.ateFood = false;
+  }
+
 }
 
 function gameOver(snake){
@@ -108,6 +114,13 @@ function oppositeDirection(event) {
 
 function moveSnake(){
   move();
+  console.log(ateFood());
+  if(ateFood()){
+    snake.ateFood = true;
+    eatFood();
+    renderFood();
+  }
+
   renderSnake();
 }
 
@@ -143,7 +156,7 @@ function getRandomOneToForty() {
 function getRandomFieldId() {
   let x = getRandomOneToForty();
   let y = getRandomOneToForty();
-  return `${x}_${y}`;
+  return [x,y];
 }
 
 function renderFood() {
@@ -153,7 +166,17 @@ function renderFood() {
     id = getRandomFieldId();
   }
 
+  snake.food = id;
+  id = `${id[0]}_${id[1]}`;
   $('#' + id).addClass('food');
+}
+
+function eatFood(){
+  $('.food').removeClass('food');
+}
+
+function ateFood(){
+  return JSON.stringify(snake.body[0]) == JSON.stringify(snake.food);
 }
 
 $(document).ready(function() {
@@ -161,7 +184,6 @@ $(document).ready(function() {
   renderSnake();
   renderFood();
   moveLoop();
-
 
 });
 
