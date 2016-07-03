@@ -136,13 +136,30 @@ function moveLoop(){
     }, 250);
 }
 
+function getRandomOneToForty() {
+  return Math.floor((Math.random() * 40) + 1);
+}
+
+function getRandomFieldId() {
+  let x = getRandomOneToForty();
+  let y = getRandomOneToForty();
+  return `${x}_${y}`;
+}
+
 function renderFood() {
-  emptyFields = snake.body;
+
+  let id = getRandomFieldId();
+  while(occupiedBySnake(snake.body, id)) {
+    id = getRandomFieldId();
+  }
+
+  $('#' + id).addClass('food');
 }
 
 $(document).ready(function() {
   renderBoard();
   renderSnake();
+  renderFood();
   moveLoop();
 
 
